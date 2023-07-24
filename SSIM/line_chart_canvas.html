@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LineChart 8000</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+    <!-- <svg width="600" height="400"></svg> -->
+    <div id="my_dataviz"></div>
+    <script>
+        // set the dimensions and margins of the graph
+        const margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = 1000 | 0,
+            height = 600 | 0;
+        
+        // create a canvas element and add it to the page
+        const canvas = document.createElement("canvas");
+        canvas.width = 1000 | 0;
+        canvas.height = 600 | 0;
+        document.getElementById("my_dataviz").appendChild(canvas);
+
+        const ctx = canvas.getContext("2d");
+        // context.imageSmoothingEnabled = false;
+
+        //Read the data
+        // d3.csv("./data/0-8000.csv",
+        
+        //   // When reading the csv, I must format variables:
+        //   function(d){
+        //     return {t: d.t, v:d.v}
+        //   }).then(
+        
+        //   // Now I can use this dataset:
+        //   function(data) {
+        //     // set up scales
+        //     const x = d3.scaleLinear()
+        //         .domain([0,7999])
+        //         .range([0, width]);
+        //     const y = d3.scaleLinear()
+        //       .domain([-356.951822625347,414.68561018271816])
+        //       .range([ height, 0 ]);
+
+        //     // draw x axis
+        //     // context.lineWidth = 1;
+        //     context.beginPath();
+        //     context.moveTo(0, height);
+        //     context.lineTo(width, height);
+        //     context.stroke();
+        //     // d3.axisBottom(x)(context);
+        //     // const xAxis = d3.axisBottom(x);
+        //     // xAxis(context);
+            
+
+        //     // draw y axis
+        //     // context.lineWidth = 1;
+        //     context.beginPath();
+        //     context.moveTo(0, height);
+        //     context.lineTo(0, 0);
+        //     context.stroke();
+        //     // d3.axisLeft(y)(context);
+        //     // const yAxis = d3.axisLeft(y);
+        //     // yAxis(context);
+
+        //     // draw the line
+        //     // context.lineWidth = 1;
+        //     context.beginPath();
+        //     data.forEach(function(d, i) {
+        //         if (i === 0) {
+        //             context.moveTo(x(d.t), y(d.v));
+        //         } else {
+        //             context.lineTo(x(d.t), y(d.v));
+        //         }
+        //     });
+        //     context.lineWidth = 1;
+        //     context.strokeStyle = "steelblue";
+        //     // context.imageSmoothingEnabled = false;
+        //     context.stroke();
+        //     // savePNG(canvas);
+
+        //     function savePNG(canvas) {
+        //         const imgURL = canvas.toDataURL("image/png");
+        //         const dlLink = document.createElement("a")
+        //         dlLink.download = `initial_data`
+        //         dlLink.href = imgURL
+        //         dlLink.dataset.downloadurl = ["image/png", dlLink.download, dlLink.href].join(":")
+        //         document.body.appendChild(dlLink)
+        //         dlLink.click()
+        //         document.body.removeChild(dlLink)
+        //     }
+        // });
+
+
+    // 设置 canvas 尺寸
+    // canvas.width = 600;
+    // canvas.height = 400;
+
+    // const canvas = document.getElementById("myCanvas");
+    // const ctx = canvas.getContext("2d");
+
+    // 获取画布的宽度和高度
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    // 创建一个新的ImageData对象，宽度和高度与画布一致
+    const imageData = ctx.createImageData(canvasWidth, canvasHeight);
+
+    // 获取图像数据，每个像素由4个数据表示，即红、绿、蓝、透明度（RGBA）
+    const pixelData = imageData.data;
+
+    // 计算折线图的数据
+    const data = [
+      { x: 0, y: 100 },
+      { x: 50, y: 150 },
+      { x: 100, y: 50 },
+      { x: 150, y: 200 },
+      { x: 200, y: 100 },
+    ];
+
+    // 计算每个像素的位置和颜色值
+    for (let x = 0; x < canvasWidth; x++) {
+      for (let y = 0; y < canvasHeight; y++) {
+        // 将每个像素点的颜色设为白色
+        const index = (y * canvasWidth + x) * 4;
+        pixelData[index] = 255;
+        pixelData[index + 1] = 255;
+        pixelData[index + 2] = 255;
+        pixelData[index + 3] = 255;
+
+        // 计算每个数据点对应的像素位置
+        data.forEach(function (d) {
+          if (d.x === x) {
+            const pointY = canvasHeight - d.y;
+            const pointIndex = (pointY * canvasWidth + x) * 4;
+            // 将折线图上的点的颜色设为蓝色
+            pixelData[pointIndex] = 0;
+            pixelData[pointIndex + 1] = 0;
+            pixelData[pointIndex + 2] = 255;
+            pixelData[pointIndex + 3] = 255;
+          }
+        });
+      }
+    }
+
+    // 将修改后的ImageData对象绘制到画布上
+    ctx.putImageData(imageData, 0, 0);
+
+
+        
+    </script>
+</body>
+</html>

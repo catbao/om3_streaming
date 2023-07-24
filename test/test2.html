@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Streaming Data Line Chart with D3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
+    <svg width="600" height="300"></svg>
+
+    <script>
+      // 创建 svg 容器和路径元素
+      var svg = d3.select("svg");
+      var path = svg.append("path")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+
+      // 创建 x 和 y 轴的比例尺
+      var xScale = d3.scaleTime().range([0, 600]);
+      var yScale = d3.scaleLinear().range([300, 0]);
+
+      // 创建 x 和 y 轴
+      var xAxis = d3.axisBottom(xScale);
+      var yAxis = d3.axisLeft(yScale);
+
+      // 添加 x 和 y 轴
+      svg.append("g")
+        .attr("transform", "translate(0, 300)")
+        .call(xAxis);
+      svg.append("g")
+        .call(yAxis);
+
+      // 创建空的数据数组
+      var data = [];
+
+      // 创建折线生成器
+      var line = d3.line()
+        .x(function(d) { return xScale(d.time); })
+        .y(function(d) { return yScale(d.value); });
+
+      // 读取数据文件并将数据添加到数组中
+    //   d3.csv("https://raw.githubusercontent.com/catbao/data_set/main/LineChart/line1.csv").then(function(newData) {
+    //     newData.forEach(function(d) {
+    //       // 将时间戳解析为 Date 对象
+    //       var parseTime = d3.timeParse("%Y/%m/%d")
+    //       var time = parseTime(time)
+    //       d.time = new Date(time);
+    //       d.value = +d.value; // 将数值转换为数字
+    //       data.push(d);
+    //     });
+
+    //     // 更新 x 和 y 轴的比例尺
+    //     xScale.domain(d3.extent(data, function(d) { return d.time; }));
+    //     yScale.domain(d3.extent(data, function(d) { return d.value; }));
+
+    //     // 更新折线图的路径和数据点
+    //     updateLineChart();
+    //   });
+
+      // 创建更新折线图的函数
+      function updateLineChart() {
+        // 更新折线图的路径
+        path.datum(data)
+          .attr("d", line);
+
+        // 更新 x 和 y 轴
+        svg.select("g:nth-child(1)")
+          .call(xAxis);
+        svg.select("g:nth-child(2)")
+          .call(yAxis);
+      }
+
+
+      var parseTime = d3.timeParse("%Y/%m/%d")
+      // 以流式方式读取数据文件并添加新数据
+      setInterval(function() {
+        d3.csv("https://raw.githubusercontent.com/catbao/data_set/main/LineChart/line1.csv").then(function(newData) {
+          newData.forEach(function(d) {
+            // 将时间戳解析为 Date 对象
+            
+            var time = parseTime(d.date)
+            d.time = new Date(time);
+            d.value = +d.value; // 将数值转换为数字
+            data.push(d);
+          });
+
+          // 更新 x 和 y 轴的比例尺
+          xScale.domain(d3.extent(data, function(d) { return new Date(parseTime(d.time)); }));
+          yScale.domain(d3.extent(data, function(d) { return d.value; }));
+
+          // 更新折线图的路径和数据点
+          updateLineChart();
+        });
+  }, 1000); // 每秒钟添加一次新数据
+
+</script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SSIM Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/image-ssim/dist/image-ssim.min.js"></script>
+</head>
+<body>
+    <h1>SSIM Demo</h1>
+    <div>
+        <h2>Reference Image</h2>
+        <img id="refImg" src="./picture/1b_zoom_init.png" alt="Reference Image">
+    </div>
+    <div>
+        <h2>Test Image</h2>
+        <img id="testImg" src="./picture/initial_data.png" alt="Test Image">
+    </div>
+    <div>
+        <h2>SSIM Score</h2>
+        <p id="ssimScore"></p>
+    </div>
+
+    <script>
+        // load images
+        const refImg = document.getElementById("refImg");
+        const testImg = document.getElementById("testImg");
+        const ssimScoreEl = document.getElementById("ssimScore");
+
+        Promise.all([loadImage(refImg.src), loadImage(testImg.src)])
+            .then(([ref, test]) => {
+                // compute SSIM score
+                const ssim = new SSIM();
+                const score = ssim.calculate(ref, test);
+                ssimScoreEl.innerHTML = score.toFixed(4);
+            })
+            .catch(err => {
+                console.error("Error loading images: ", err);
+            });
+
+        // helper function to load image
+        function loadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => resolve(img);
+                img.onerror = err => reject(err);
+                img.src = url;
+            });
+        }
+    </script>
+</body>
+</html>

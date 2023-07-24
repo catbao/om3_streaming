@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LineChartByPixel</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+    <!-- <svg width="600" height="400"></svg> -->
+    <div id="my_dataviz"></div>
+    <script>
+        const margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = 1000 | 0,
+            height = 600 | 0;
+        
+        const canvas = document.createElement("canvas");
+        canvas.width = 1000 | 0;
+        canvas.height = 600 | 0;
+        document.getElementById("my_dataviz").appendChild(canvas);
+
+        const context = canvas.getContext("2d");
+        // context.imageSmoothingEnabled = false;
+        
+        // const canvas = document.getElementById('myCanvas');
+        // const context = canvas.getContext('2d');
+
+        d3.csv('./data/8000-16000.csv').then(function(data) {
+            const width = canvas.width;
+            const height = canvas.height;
+            // const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+            const xScale = d3.scaleLinear()
+                            .domain([8000,16000])
+                            .range([0, width]);
+            const yScale = d3.scaleLinear()
+                            .domain([-356.951822625347,414.68561018271816])
+                            .range([height, 0]);
+
+            const imageData = context.createImageData(width, height);
+
+            // for (let i = 1; i < data.length; i++) {
+            //     const x1 = Math.floor(xScale(+data[i-1].t));
+            //     const y1 = Math.floor(yScale(+data[i-1].v));
+            //     const x2 = Math.floor(xScale(+data[i].t));
+            //     const y2 = Math.floor(yScale(+data[i].v));
+            //     drawLine(imageData, x1, y1, x2, y2, [70, 130, 180, 255]);
+            // }
+            for(let i = 0; i < width; ++i){
+                let gap = (data.length-1) / width;
+                let ts = i * gap;
+                let te = (i + 1) * gap;
+                console.log(gap,ts,te);
+                for(let j = ts + 1; j < te; ++j){
+                    let x1 = i;
+                    let y1 = Math.floor(yScale(data[j-1].v));
+                    let x2 = i;
+                    let y2 = Math.floor(yScale(data[j].v));
+                    drawLine(imageData, x1, y1, x2, y2, [70, 130, 180, 255]);
+                }
+            }
+
+            context.putImageData(imageData, 0, 0);
+            // savePNG(canvas);
+        });
+
+        function drawLine(imageData, x1, y1, x2, y2, color) {
+            const dx = Math.abs(x2 - x1);
+            const dy = Math.abs(y2 - y1);
+            const sx = (x1 < x2) ? 1 : -1;
+            const sy = (y1 < y2) ? 1 : -1;
+            let err = dx - dy;
+
+            while(true) {
+                const index = (x1 + y1 * imageData.width) * 4;
+                imageData.data[index] = color[0];
+                imageData.data[index+1] = color[1];
+                imageData.data[index+2] = color[2];
+                imageData.data[index+3] = color[3];
+
+                if (x1 === x2 && y1 === y2) break;
+                const e2 = 2 * err;
+                if (e2 > -dy) { err -= dy; x1 += sx; }
+                if (e2 < dx) { err += dx; y1 += sy; }
+            }
+        }
+
+        function savePNG(canvas) {
+            const imgURL = canvas.toDataURL("image/png");
+            const dlLink = document.createElement("a")
+            dlLink.download = `initial_data`
+            dlLink.href = imgURL
+            dlLink.dataset.downloadurl = ["image/png", dlLink.download, dlLink.href].join(":")
+            document.body.appendChild(dlLink)
+            dlLink.click()
+            document.body.removeChild(dlLink)
+        }
+
+    </script>
+</body>
+</html>

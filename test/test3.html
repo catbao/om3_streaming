@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Streaming Line Chart</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+  </head>
+  <body>
+    <svg width="500" height="300"></svg>
+
+    <script>
+      const svg = d3.select('svg');
+      const data = [];
+      const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+      const width = +svg.attr('width') - margin.left - margin.right;
+      const height = +svg.attr('height') - margin.top - margin.bottom;
+      const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+      const x = d3.scaleTime()
+        .rangeRound([0, width]);
+
+      const y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+
+      const line = d3.line()
+        .x(d => x(d.timestamp))
+        .y(d => y(d.value));
+
+      g.append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(d3.axisBottom(x));
+
+      g.append('g')
+        .call(d3.axisLeft(y))
+        .append('text')
+        .attr('fill', '#000')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 6)
+        .attr('dy', '0.71em')
+        .attr('text-anchor', 'end')
+        .text('Value');
+
+      const path = g.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
+        .attr('stroke-width', 1.5);
+
+      function addData(d) {
+        var parseTime = d3.timeParse("%Y/%m/%d")
+        var timestamp = parseTime(d.date)
+        const newData = {
+          timestamp: new Date(timestamp),
+          value: +d.value
+        };
+        data.push(newData);
+        if (data.length > 10) {
+          data.shift();
+        }
+        updateChart();
+      }
+
+      function updateChart() {
+        x.domain(d3.extent(data, d => d.timestamp));
+        y.domain([0, d3.max(data, d => d.value)]);
+        path.attr('d', line);
+      }
+
+    //   d3.text('https://raw.githubusercontent.com/catbao/data_set/main/LineChart/line1.csv', function(text) {
+    //     const parser = d3.csvParseRows(text);
+    //     parser.forEach(function(row) {
+    //       addData({
+    //         timestamp: row[0],
+    //         value: row[1]
+    //       });
+    //     });
+    //   });
+    // d3.csv('https://raw.githubusercontent.com/catbao/data_set/main/LineChart/line1.csv',).then(function(newData) {
+    //     // const parser = d3.csvParseRows(text);
+    //     newData.forEach(function(d) {
+    //         addData(d)
+    //       });
+    //   });
+
+    //   setInterval(function() {
+    //     d3.text('https://raw.githubusercontent.com/catbao/data_set/main/LineChart/line1.csv', function(text) {
+    //       const parser = d3.csvParseRows(text);
+    //       addData({
+    //         timestamp: parser[parser.length - 1][0],
+    //         value: parser[parser.length - 1][1]
+    //       });
+    //     });
+    //   }, 1000);
+    setInterval(function() {
+        d3.csv('https://raw.githubusercontent.com/catbao/data_set/main/LineChart/line1.csv').then(function(newData) {
+        //   const parser = d3.csvParseRows(text);
+            newData.forEach(function(d) {
+                addData(d)
+            });
+        });
+      }, 1000);
+
+    </script>
+  </body>
+</html>

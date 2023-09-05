@@ -94,7 +94,7 @@ async function nonuniformMinMaxEncode() {
         let curMinV = new Array(2 ** (maxL - l));
         let curMaxV = new Array(2 ** (maxL - l));
 
-
+        //add 
         for (let i = 0; i < 2 ** (maxL - l + 1); i += 2) {
 
             //Min

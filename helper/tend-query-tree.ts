@@ -5,8 +5,8 @@ export default class TrendTree {
     _rightChild: TrendTree | null;
     preP: TrendTree | null;
     nextP: TrendTree | null;
-    yArray: [number, number, number, number];
-    difference: [number, number, number, number] | null;
+    yArray: [number, number, number, number, number];
+    difference: [number, number, number, number, number] | null;
     level: number;
     index: number;
     previousSibling: TrendTree | null;
@@ -14,8 +14,9 @@ export default class TrendTree {
     trendRange: Array<number>
     timeRange: Array<number>
     nodeType:'O'|'NULL'|'LEFTNULL'|'RIGHTNULL'
+    gapFlag:'NO'|'L'|'R';//L miss data in left; R  miss data in right
     //fetcher: TreeNodeFetcher
-    constructor(parent: TrendTree | null, leftChild = true, index = 0, yArray: [number, number, number, number], dif: [number, number, number, number] | null,nodeType?:'O'|'NULL'|'LEFTNULL'|'RIGHTNULL') {
+    constructor(parent: TrendTree | null, leftChild = true, index = 0, yArray: [number, number, number, number, number], dif: [number, number, number, number, number] | null,nodeType?:'O'|'NULL'|'LEFTNULL'|'RIGHTNULL') {
         this.nodeType='O'
         if(nodeType){
             this.nodeType=nodeType
@@ -23,7 +24,7 @@ export default class TrendTree {
         this.parent = parent;
         this._leftChild = null;
         this._rightChild = null;
-        this.yArray = [0, 0, 0, 0];//Time-min,Val-min,Val-max,T-max
+        this.yArray = [0, 0, 0, 0, 0];//Time-min,Val-min,Val-max,T-max
         this.difference = null;
 
         this.level = 0;

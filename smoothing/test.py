@@ -39,7 +39,7 @@ def gaussian_filter2(data, sigma):
     smoothed_data = np.zeros_like(data)
 
     weights = np.exp(-0.5 * (np.arange(-n, n + 1) / sigma)**2)
-    # print(weights)
+    print(weights)
     # weights[n] *= 2
     # weights[n+1] *= 2
 
@@ -105,7 +105,7 @@ print(need_index)
 plt.plot(x, y, label='Original')
 
 # 使用高斯滤波器进行平滑
-smoothed_y = gaussian_filter(y, sigma=2)
+smoothed_y = gaussian_filter(y, sigma=1)
 print("smoothed_y:")
 print(smoothed_y)
 
@@ -129,8 +129,11 @@ plt.plot(x, smoothed_y, label='Smoothed')
 # sampled_x = [7,13,16,21,34,40,48,53] #4 pixels
 # sampled_y = [31,3,37,1,39,6,38,1]
 
-sampled_x = [4,7, 8,13,14,15, 16,21, 25,26,31, 32,34,39, 40,42,47, 48,53, 60,63] #8 pixels
-sampled_y = [6,31, 16,3,27,15, 37,1, 32,9,23, 8,39,37, 6,37,14, 38,1, 6,33]
+# sampled_x = [4,7, 8,13,14,15, 16,21, 25,26,31, 32,34,39, 40,42,47, 48,53, 60,63] #8 pixels
+# sampled_y = [6,31, 16,3,27,15, 37,1, 32,9,23, 8,39,37, 6,37,14, 38,1, 6,33]
+sampled_x = [3.5,4,7, 8,11.5,13,14,15, 16,19.5,21, 25,26,27.5,31, 32,34,35.5,39, 40,42,43.5,47, 48,51.5,53, 59.5,60,63] #add new weighted mean
+sampled_y = [19.375,6,31, 16,15,3,27,15, 37,25.625,1, 32,9,22.5,23, 8,39,23.125,37, 6,37,20,14, 38,18.75,1, 22.5,6,33]
+
 # sampled_x = [3.5,4,7, 8,11.5,13,14,15, 16,19.5,21, 25,26,27.5,31, 32,34,35.5,39, 40,42,43.5,47, 48,51.5,53, 59.5,60,63] #only add average
 # sampled_y = [18.5,6,31, 16,14,3,27,15, 37,24.875,1, 32,9,22.375,23, 8,39,23.375,37, 6,37,20.625,14, 38,17.5,1, 21.75,6,33]
 # sampled_x = [3.5,4,7, 8,11.5,13,14,15, 16,19.5,21, 25,26,27.5,31, 32,34,35.5,39, 40,42,43.5,47, 48,51.5,53, 57.5,60,63] #only weighted average
@@ -149,7 +152,7 @@ sampled_y = [6,31, 16,3,27,15, 37,1, 32,9,23, 8,39,37, 6,37,14, 38,1, 6,33]
 # sampled_x = [0,2,3.5,4,7, 9,11,11.5,13,14, 16,19.5,20,21,22,23, 24,25,26,27,27.5,29, 32,33,34,35,35.5,37,38, 40,41,42,43.5,44,46,47, 48,49,51.5,52,53,54,55, 58,59.5,61,62,63] #select one every bin and average
 # sampled_y = [25,14,18.5,6,31, 12,17,14,3,27, 37,24.875,27,1,22,32, 24,32,9,17,22.375,27, 8,17,39,27,23.375,13,24, 6,32,37,20.625,24,26,14, 38,27,17.5,17,1,20,6, 29,21.75,23,7,33]
 
-sampled_y = gaussian_filter2(sampled_y,sigma=2)
+sampled_y = gaussian_filter2(sampled_y,sigma=1)
 print("sampled_smoothed_y:")
 print(sampled_y)
 plt.plot(sampled_x, sampled_y, label='Sampled_smoothed')

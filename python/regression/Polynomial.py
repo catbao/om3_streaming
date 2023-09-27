@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # np.random.seed(0)
-data = pd.read_csv('./python/regression/data_quadratic.csv')
+data = pd.read_csv('./python/regression/new_data_quadratic.csv')
 X = data.iloc[:, 0].values.reshape(-1, 1)
 y = data.iloc[:, 1].values.reshape(-1, 1)
 

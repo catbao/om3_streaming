@@ -18,9 +18,12 @@ def normalized_gaussian_kernel(size, sigma):
 data = pd.read_csv('./python/regression/data.csv')
 signal = data.iloc[:, 1].values
 sigma = 25
-size = 6 * sigma + 1
+size = 6 * sigma
+# size = 7
 
 gaussian_kernel = normalized_gaussian_kernel(size, sigma)
+if sigma != 1:
+    gaussian_kernel_sum = gaussian_kernel.reshape(6, 25).sum(axis=1)
 smoothed_signal = np.convolve(signal, gaussian_kernel, mode="same")
 if sigma == 1:
     np.savetxt("./python/guassian/ave_smoothed_signal.txt", smoothed_signal, fmt='%.2f')

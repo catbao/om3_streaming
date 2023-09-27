@@ -9,6 +9,9 @@ data = pd.read_csv('./python/regression/new_data.csv')
 X = data.iloc[:, 0].values.reshape(-1, 1)
 y = data.iloc[:, 1].values.reshape(-1, 1)
 
+# data = pd.read_csv('./python/regression/new_data.csv')
+# Y = data.iloc[:, 1].values.reshape(-1, 1)
+
 # 线性回归模型对象
 model = LinearRegression()
 

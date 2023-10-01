@@ -18,7 +18,7 @@ async function nonuniformMinMaxEncode() {
     // let sql = `select * from om3.encode2`
     // await pool.query(sql);
     let start_time = new Date();
-    let sql = `COPY (SELECT * FROM om3.encode2 WHERE i<2048) TO 'C:/Users/A/Desktop/om3_streaming/db/encode2_test.csv' CSV HEADER`;
+    let sql = `COPY (SELECT * FROM om3.encode2 WHERE i<2048) TO 'C:/Users/A/Desktop/om3_streaming/db/encode.csv' CSV HEADER`;
     await pool.query(sql);
     // let sql2 = `COPY`
     // let insertTestSql = `insert into om3.encode5_dataset(i,minvd,maxvd) values `;

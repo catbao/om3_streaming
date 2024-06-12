@@ -5,7 +5,7 @@ from sklearn.linear_model import LinearRegression
 
 # X = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).reshape(-1, 1) 
 # y = np.array([2, 4, 5, 4, 6, 5, 4, 3, 2, 1])  
-data = pd.read_csv('./python/regression/new_data.csv')
+data = pd.read_csv('/Users/bao/Desktop/om3_streaming/python/regression/daily-minimum-temperatures-in-me.csv')
 X = data.iloc[:, 0].values.reshape(-1, 1)
 y = data.iloc[:, 1].values.reshape(-1, 1)
 
@@ -32,4 +32,4 @@ plt.legend()
 plt.xlabel('X')
 plt.ylabel('y')
 
-# plt.show()
+plt.show()

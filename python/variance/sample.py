@@ -60,7 +60,7 @@ for i in range(1,times):
     variance_sum += (max_val-μ)**2
     variance_sum = variance_sum / (num_samples+2)
     # print("Variance_sum:", variance_sum)
-    print(i, "th:", np.sqrt(variance_sum))
+    # print(i, "th:", np.sqrt(variance_sum))
     final_result += np.sqrt(variance_sum)
 
 print(final_result / times)
